@@ -1,0 +1,164 @@
+.product-card {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-card-link {
+  display: block;
+  color: inherit;
+}
+
+.product-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background-color: var(--soft-beige);
+  margin-bottom: 1rem;
+}
+
+.product-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.product-card:hover .product-card-image {
+  transform: scale(1.05);
+}
+
+.product-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--secondary-gray);
+  background-color: var(--soft-beige);
+}
+
+.product-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+
+.badge-new {
+  background-color: var(--deep-forest-green);
+  color: var(--white);
+}
+
+.badge-bestseller {
+  background-color: var(--muted-gold);
+  color: var(--white);
+}
+
+.badge-discount {
+  background-color: var(--muted-burgundy);
+  color: var(--white);
+  top: 2.5rem;
+}
+
+.wishlist-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: all 0.3s ease;
+  color: var(--charcoal-black);
+}
+
+.wishlist-btn:hover {
+  background-color: var(--white);
+}
+
+.wishlist-btn.active {
+  color: var(--muted-burgundy);
+}
+
+.quick-add-btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(32, 32, 32, 0.95);
+  color: var(--white);
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 2;
+}
+
+.product-card:hover .quick-add-btn {
+  transform: translateY(0);
+}
+
+.product-card-info {
+  padding: 0 0.25rem;
+}
+
+.product-card-name {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  text-transform: capitalize;
+}
+
+.product-card-category {
+  font-size: 0.8rem;
+  color: var(--secondary-gray);
+  text-transform: capitalize;
+  margin-bottom: 0.5rem;
+}
+
+.product-card-prices {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.product-card-price {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.product-card-original-price {
+  font-size: 0.85rem;
+  color: var(--secondary-gray);
+  text-decoration: line-through;
+}
+
+@media (max-width: 768px) {
+  .quick-add-btn {
+    transform: translateY(0);
+    font-size: 0.75rem;
+    padding: 0.6rem;
+  }
+}

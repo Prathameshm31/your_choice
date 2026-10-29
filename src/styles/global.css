@@ -1,0 +1,45 @@
+@import './variables.css';
+
+.btn-primary {
+  background-color: var(--deep-forest-green);
+  color: var(--white);
+  padding: 0.75rem 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+  transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--charcoal-black);
+  border: 1px solid var(--charcoal-black);
+  padding: 0.75rem 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--charcoal-black);
+  color: var(--white);
+}
+
+.btn-gold {
+  background-color: var(--muted-gold);
+  color: var(--white);
+  padding: 0.75rem 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+  transition: opacity 0.3s ease;
+}
+
+.btn-gold:hover {
+  opacity: 0.9;
+}

@@ -1,0 +1,105 @@
+.checkout-page {
+  padding: 2rem 0 4rem;
+  background-color: var(--warm-ivory);
+}
+
+.checkout-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.demo-notice {
+  color: var(--muted-burgundy);
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.checkout-form {
+  background-color: var(--white);
+  padding: 2rem;
+  border: 1px solid var(--soft-beige);
+}
+
+.checkout-form h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.checkout-form input[type="text"],
+.checkout-form input[type="email"],
+.checkout-form input[type="tel"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--soft-beige);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.payment-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.checkout-summary {
+  background-color: var(--white);
+  padding: 2rem;
+  border: 1px solid var(--soft-beige);
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.checkout-summary h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.checkout-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--soft-beige);
+}
+
+.checkout-item img {
+  width: 60px;
+  height: 75px;
+  object-fit: cover;
+}
+
+@media (max-width: 968px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

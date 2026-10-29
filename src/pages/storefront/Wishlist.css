@@ -1,0 +1,67 @@
+.wishlist-page {
+  padding: 2rem 0 4rem;
+  background-color: var(--warm-ivory);
+}
+
+.wishlist-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.wishlist-item {
+  background-color: var(--white);
+  border: 1px solid var(--soft-beige);
+  overflow: hidden;
+}
+
+.wishlist-item img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+}
+
+.wishlist-item-info {
+  padding: 1.25rem;
+}
+
+.wishlist-item-info h3 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.wishlist-item-price {
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.wishlist-item-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wishlist-item-actions button {
+  width: 100%;
+  padding: 0.6rem;
+}
+
+@media (max-width: 968px) {
+  .wishlist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .wishlist-grid {
+    grid-template-columns: 1fr;
+  }
+}
