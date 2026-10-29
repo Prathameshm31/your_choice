@@ -1,14 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../../components/products/ProductCard';
 import { useProducts } from '../../context/ProductContext';
 import { categories } from '../../data/categories';
 import './CategoryPage.css';
 
+const watchBanners = [
+  '/images/banners/watches/watch_I_will_3d_product_an.jpg',
+  '/images/banners/watches/watch_TIME_WEARS_BETTER___.jpg',
+  '/images/banners/watches/watch_Watch_render.jpeg.jpg',
+  '/images/banners/watches/watch_1.jpeg.jpg',
+  '/images/banners/watches/watch_.jpeg.jpg',
+  '/images/banners/watches/watch_.jpeg.jpg',
+  '/images/banners/watches/watch_2026-10-29_11-23-13.jpg',
+  '/images/banners/watches/watch_2026-10-29_11-23-14.jpg',
+];
+
 const CategoryPage = () => {
   const { slug } = useParams();
   const { getProductsByCategory } = useProducts();
   const [sortBy, setSortBy] = useState('default');
+  const [currentWatchBanner, setCurrentWatchBanner] = useState(0);
+
+  useEffect(() => {
+    if (slug === 'watches') {
+      const interval = setInterval(() => {
+        setCurrentWatchBanner((prev) => (prev + 1) % watchBanners.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [slug]);
 
   const category = categories.find(c => c.slug === slug);
   let products = getProductsByCategory(slug);
@@ -36,13 +57,11 @@ const CategoryPage = () => {
       <div className="category-banner">
         {slug === 'watches' ? (
           <div className="category-banner-image">
-            <video
-              src="/videos/watch-highlight.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            <img
+              src={watchBanners[currentWatchBanner]}
+              alt="Watches Collection"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.5s ease' }}
+              onError={(e) => {e.target.src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1200';}}
             />
           </div>
         ) : (
