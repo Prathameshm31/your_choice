@@ -34,9 +34,22 @@ const CategoryPage = () => {
   return (
     <div className="category-page">
       <div className="category-banner">
-        <div className="category-banner-image">
-          <img src={category.image} alt={category.name} onError={(e) => {e.target.src = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200';}} />
-        </div>
+        {slug === 'watches' ? (
+          <div className="category-banner-image">
+            <video
+              src="/videos/watch-highlight.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+        ) : (
+          <div className="category-banner-image">
+            <img src={category.image} alt={category.name} onError={(e) => {e.target.src = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200';}} />
+          </div>
+        )}
         <div className="category-banner-content">
           <h1 className="category-banner-title">{category.name}</h1>
           <p className="category-banner-desc">{category.description}</p>
