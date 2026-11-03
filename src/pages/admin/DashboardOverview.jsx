@@ -1,17 +1,33 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import AdminLayout from '../../layouts/AdminLayout';
 import { useProducts } from '../../context/ProductContext';
+import { useOrders } from '../../context/OrderContext';
+import { formatCurrency } from '../../utils/currency';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import './Dashboard.css';
 
 const DashboardOverview = () => {
   const { products } = useProducts();
+  const { orders } = useOrders();
+
+  const activeOrders = orders.filter(order => order.status !== 'Cancelled');
+  const revenue = activeOrders.reduce((sum, order) => sum + (order.total || 0), 0);
+  const lowStockProducts = products.filter(p => (p.stockQuantity || 0) > 0 && (p.stockQuantity || 0) <= 5);
+  const outOfStockProducts = products.filter(p => (p.stockQuantity || 0) === 0);
 
   const stats = [
     { label: 'Total Products', value: products.length },
     { label: 'Featured', value: products.filter(p => p.featured).length },
     { label: 'New Arrivals', value: products.filter(p => p.newArrival).length },
     { label: 'Best Sellers', value: products.filter(p => p.bestseller).length },
+  ];
+
+  const orderStats = [
+    { label: 'Total Orders', value: orders.length },
+    { label: 'Revenue', value: formatCurrency(revenue) },
+    { label: 'Low Stock', value: lowStockProducts.length },
+    { label: 'Out of Stock', value: outOfStockProducts.length },
   ];
 
   const categoryData = [
@@ -23,15 +39,25 @@ const DashboardOverview = () => {
   ];
 
   const COLORS = ['#263D32', '#B89B63', '#8D3434', '#777777', '#202020'];
+  const recentOrders = orders.slice(0, 5);
 
   return (
     <AdminLayout>
       <div className="admin-page">
         <h1 className="admin-page-title">Dashboard Overview</h1>
-        <p className="admin-page-subtitle">Sample Analytics</p>
+        <p className="admin-page-subtitle">Live store analytics</p>
 
         <div className="stats-grid">
           {stats.map((stat, idx) => (
+            <div key={idx} className="stat-card">
+              <p className="stat-label">{stat.label}</p>
+              <p className="stat-value">{stat.value}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="stats-grid">
+          {orderStats.map((stat, idx) => (
             <div key={idx} className="stat-card">
               <p className="stat-label">{stat.label}</p>
               <p className="stat-value">{stat.value}</p>
@@ -76,6 +102,84 @@ const DashboardOverview = () => {
             </ResponsiveContainer>
           </div>
         </div>
+
+        <div className="admin-page-header" style={{ marginTop: '2rem' }}>
+          <h2 style={{ fontSize: '1.1rem' }}>Recent Orders</h2>
+          <Link to="/admin/orders" className="section-link">View All</Link>
+        </div>
+
+        {recentOrders.length === 0 ? (
+          <div className="admin-table-container" style={{ padding: '1.5rem', textAlign: 'center' }}>
+            No orders yet.
+          </div>
+        ) : (
+          <div className="admin-table-container">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>Customer</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentOrders.map(order => (
+                  <tr key={order.id}>
+                    <td><strong>{order.id}</strong></td>
+                    <td>{order.customer?.name || 'Guest'}</td>
+                    <td>{formatCurrency(order.total)}</td>
+                    <td>
+                      <span className={`status-pill status-${(order.status || '').toLowerCase()}`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        <div className="admin-page-header" style={{ marginTop: '2rem' }}>
+          <h2 style={{ fontSize: '1.1rem' }}>Low Stock Alerts</h2>
+          <Link to="/admin/products" className="section-link">Manage Products</Link>
+        </div>
+
+        {lowStockProducts.length === 0 && outOfStockProducts.length === 0 ? (
+          <div className="admin-table-container" style={{ padding: '1.5rem', textAlign: 'center' }}>
+            All products are well stocked.
+          </div>
+        ) : (
+          <div className="admin-table-container">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...outOfStockProducts, ...lowStockProducts].map(product => (
+                  <tr key={product.id}>
+                    <td>{product.name}</td>
+                    <td style={{ textTransform: 'capitalize' }}>{product.category}</td>
+                    <td>{product.stockQuantity || 0}</td>
+                    <td>
+                      <span className={`stock-badge ${(product.stockQuantity || 0) === 0 ? 'stock-out' : 'stock-low'}`}>
+                        {(product.stockQuantity || 0) === 0 ? 'Out of Stock' : 'Low Stock'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </AdminLayout>
   );

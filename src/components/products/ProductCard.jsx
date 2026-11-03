@@ -19,6 +19,10 @@ const ProductCard = ({ product }) => {
 
   const handleAddToCart = (e) => {
     e.preventDefault();
+    if ((product.stockQuantity || 0) <= 0) {
+      alert('Out of stock');
+      return;
+    }
     if (product.sizes && product.sizes.length > 0 && product.colors && product.colors.length > 0) {
       addToCart(product, product.sizes[0], product.colors[0], 1);
     } else {

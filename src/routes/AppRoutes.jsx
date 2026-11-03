@@ -13,6 +13,7 @@ import Contact from '../pages/storefront/Contact';
 import AdminLogin from '../pages/admin/AdminLogin';
 import DashboardOverview from '../pages/admin/DashboardOverview';
 import Products from '../pages/admin/Products';
+import Orders from '../pages/admin/Orders';
 import AddProduct from '../pages/admin/AddProduct';
 import EditProduct from '../pages/admin/EditProduct';
 
@@ -33,6 +34,7 @@ const AppRoutes = () => {
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<DashboardOverview />} />
       <Route path="/admin/products" element={<Products />} />
+      <Route path="/admin/orders" element={<Orders />} />
       <Route path="/admin/products/new" element={<AddProduct />} />
       <Route path="/admin/products/:id/edit" element={<EditProduct />} />
     </Routes>

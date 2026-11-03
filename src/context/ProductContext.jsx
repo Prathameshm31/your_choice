@@ -60,6 +60,40 @@ export const ProductProvider = ({ children }) => {
     setProducts(prev => prev.filter(p => p.id !== id));
   };
 
+  const reduceStock = (items) => {
+    const quantityById = items.reduce((acc, item) => {
+      acc[item.id] = (acc[item.id] || 0) + item.quantity;
+      return acc;
+    }, {});
+    setProducts(prev =>
+      prev.map(product => {
+        const quantity = quantityById[product.id];
+        if (!quantity) return product;
+        return {
+          ...product,
+          stockQuantity: Math.max(0, (product.stockQuantity || 0) - quantity),
+        };
+      })
+    );
+  };
+
+  const restoreStock = (items) => {
+    const quantityById = items.reduce((acc, item) => {
+      acc[item.id] = (acc[item.id] || 0) + item.quantity;
+      return acc;
+    }, {});
+    setProducts(prev =>
+      prev.map(product => {
+        const quantity = quantityById[product.id];
+        if (!quantity) return product;
+        return {
+          ...product,
+          stockQuantity: (product.stockQuantity || 0) + quantity,
+        };
+      })
+    );
+  };
+
   const getProductById = (id) => {
     return products.find(p => p.id === id);
   };
@@ -75,6 +109,8 @@ export const ProductProvider = ({ children }) => {
         addProduct,
         updateProduct,
         deleteProduct,
+        reduceStock,
+        restoreStock,
         getProductById,
         getProductsByCategory,
       }}

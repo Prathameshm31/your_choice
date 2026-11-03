@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { useProducts } from '../../context/ProductContext';
+import { useOrders } from '../../context/OrderContext';
 import { formatCurrency } from '../../utils/currency';
 import './Checkout.css';
 
 const Checkout = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
+  const { getProductById, reduceStock } = useProducts();
+  const { placeOrder } = useOrders();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -19,6 +23,7 @@ const Checkout = () => {
   });
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState('');
+  const [orderTotal, setOrderTotal] = useState(0);
 
   const subtotal = getCartTotal();
   const shipping = subtotal > 2000 ? 0 : 99;
@@ -30,12 +35,59 @@ const Checkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (orderPlaced) return;
     if (!formData.name || !formData.email || !formData.phone || !formData.address) {
       alert('Please fill all required fields');
       return;
     }
+    const quantityById = cartItems.reduce((acc, item) => {
+      acc[item.id] = (acc[item.id] || 0) + item.quantity;
+      return acc;
+    }, {});
+    const invalidId = Object.keys(quantityById).find((id) => {
+      const product = getProductById(id);
+      return !product || quantityById[id] > (product.stockQuantity || 0);
+    });
+    if (invalidId) {
+      const product = getProductById(invalidId);
+      const item = cartItems.find(i => i.id === invalidId);
+      alert(
+        product
+          ? `Only ${product.stockQuantity || 0} left for ${item.name}. Please update your cart.`
+          : `${item.name} is no longer available.`
+      );
+      return;
+    }
     const id = 'YC-' + Date.now().toString().slice(-8);
+    const orderItems = cartItems.map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      size: item.size,
+      color: item.color,
+      frontImage: item.frontImage || item.mainImage,
+    }));
+    reduceStock(orderItems);
+    placeOrder({
+      id,
+      items: orderItems,
+      subtotal,
+      shipping,
+      total,
+      customer: {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        pincode: formData.pincode,
+      },
+      paymentMethod: formData.paymentMethod,
+    });
     setOrderId(id);
+    setOrderTotal(total);
     setOrderPlaced(true);
     clearCart();
   };
@@ -53,8 +105,11 @@ const Checkout = () => {
           <p style={{ color: 'var(--secondary-gray)', marginBottom: '1.5rem' }}>
             Thank you for your purchase. Your order has been received.
           </p>
-          <p style={{ fontSize: '1.1rem', marginBottom: '2rem' }}>
+          <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>
             <strong>Order ID:</strong> {orderId}
+          </p>
+          <p style={{ fontSize: '1.1rem', marginBottom: '2rem' }}>
+            <strong>Total:</strong> {formatCurrency(orderTotal)}
           </p>
           <p style={{ color: 'var(--muted-burgundy)', fontSize: '0.9rem', marginBottom: '2rem' }}>
             This is a demo checkout - no payment has been processed.

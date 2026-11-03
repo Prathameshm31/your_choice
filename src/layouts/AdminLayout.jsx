@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, LogOut, Home } from 'lucide-react';
+import { LayoutDashboard, Package, ClipboardList, LogOut, Home } from 'lucide-react';
 import Logo from '../components/common/Logo';
 import './AdminLayout.css';
 
@@ -30,6 +30,9 @@ const AdminLayout = ({ children }) => {
           </Link>
           <Link to="/admin/products" className="admin-nav-link">
             <Package size={18} /> Products
+          </Link>
+          <Link to="/admin/orders" className="admin-nav-link">
+            <ClipboardList size={18} /> Orders
           </Link>
           <Link to="/" className="admin-nav-link">
             <Home size={18} /> View Store

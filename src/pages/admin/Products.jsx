@@ -51,7 +51,11 @@ const Products = () => {
                   </td>
                   <td style={{ textTransform: 'capitalize' }}>{product.category}</td>
                   <td>{formatCurrency(product.price)}</td>
-                  <td>{product.stockQuantity}</td>
+                  <td>
+                    <span className={`stock-badge ${(product.stockQuantity || 0) === 0 ? 'stock-out' : (product.stockQuantity || 0) <= 5 ? 'stock-low' : 'stock-ok'}`}>
+                      {product.stockQuantity || 0}
+                    </span>
+                  </td>
                   <td>{product.featured ? 'Yes' : 'No'}</td>
                   <td>
                     <div className="action-buttons">

@@ -51,6 +51,10 @@ const ProductDetails = () => {
       alert('Please select a color');
       return;
     }
+    if (quantity > (product.stockQuantity || 0)) {
+      alert(`Only ${product.stockQuantity || 0} left in stock`);
+      return;
+    }
     addToCart(product, selectedSize || 'One Size', selectedColor || 'Default', quantity);
     alert('Added to cart!');
   };
@@ -133,7 +137,10 @@ const ProductDetails = () => {
               <div className="quantity-selector">
                 <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
                 <span>{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)}>+</button>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  disabled={quantity >= (product.stockQuantity || 0)}
+                >+</button>
               </div>
             </div>
 
