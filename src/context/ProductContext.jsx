@@ -2,6 +2,22 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { products as initialProducts } from '../data/products';
 import { getFromStorage, setToStorage } from '../utils/storage';
 
+const PRODUCTS_STORAGE_KEY = 'yourchoice_products';
+const PRODUCTS_IMAGE_VERSION_KEY = 'yourchoice_products_image_version';
+const PRODUCTS_IMAGE_VERSION = '2';
+
+const syncProductImages = (storedProducts) =>
+  storedProducts.map((product) => {
+    const source = initialProducts.find((p) => p.id === product.id);
+    if (!source) return product;
+    return {
+      ...product,
+      mainImage: source.mainImage,
+      frontImage: source.frontImage,
+      backImage: source.backImage,
+    };
+  });
+
 const ProductContext = createContext();
 
 export const useProducts = () => {
@@ -14,12 +30,16 @@ export const useProducts = () => {
 
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState(() => {
-    const stored = getFromStorage('yourchoice_products', null);
-    return stored || initialProducts;
+    const stored = getFromStorage(PRODUCTS_STORAGE_KEY, null);
+    if (!stored) return initialProducts;
+    const storedVersion = getFromStorage(PRODUCTS_IMAGE_VERSION_KEY, null);
+    if (storedVersion === PRODUCTS_IMAGE_VERSION) return stored;
+    return syncProductImages(stored);
   });
 
   useEffect(() => {
-    setToStorage('yourchoice_products', products);
+    setToStorage(PRODUCTS_STORAGE_KEY, products);
+    setToStorage(PRODUCTS_IMAGE_VERSION_KEY, PRODUCTS_IMAGE_VERSION);
   }, [products]);
 
   const addProduct = (product) => {
